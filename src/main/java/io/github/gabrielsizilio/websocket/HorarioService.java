@@ -1,6 +1,5 @@
 package io.github.gabrielsizilio.websocket;
 
-import java.util.Random;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -22,21 +21,13 @@ public class HorarioService {
 
     @Resource
     TimerService tservice;
-    private Random random;
     private volatile List<String> horas;
 
     @PostConstruct
     public void init() {
-        random = new Random();
         tservice.createIntervalTimer(1000, 1000, new TimerConfig());
 
         horas = new ArrayList<>();
-
-        horas.add(pegaHora(ZoneId.of("America/Sao_Paulo")));
-        horas.add(pegaHora(ZoneId.of("Asia/Tokyo")));
-        horas.add(pegaHora(ZoneId.of("Australia/Sydney")));
-        horas.add(pegaHora(ZoneId.of("Asia/Jakarta")));
-        horas.add(pegaHora(ZoneId.of("Europe/Moscow")));
     }
 
     @Timeout

@@ -15,21 +15,17 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import java.util.List;
 
-/* WebSocket version of the dukeetf example */
 @ServerEndpoint("/horario")
 public class Endpoint {
 
     private static final Logger logger = Logger.getLogger("Endpoint HORÁRIO MUNDIAL");
-    /* Queue for all open WebSocket sessions */
     static Queue<Session> queue = new ConcurrentLinkedQueue<>();
 
-    /* PriceVolumeBean calls this method to send updates */
     public static void send(List<String> horas) throws EncodeException {
         String msg = String.format(" %s / %s / %s / %s / %s",
                 horas.get(0), horas.get(1), horas.get(2), horas.get(3), horas.get(4));
 
         try {
-            /* Send updates to all open WebSocket sessions */
             for (Session session : queue) {
                 session.getBasicRemote().sendText(msg);
             }
@@ -40,14 +36,12 @@ public class Endpoint {
 
     @OnOpen
     public void openConnection(Session session) {
-        /* Register this connection in the queue */
         queue.add(session);
         logger.log(Level.INFO, "Connection opened.");
     }
 
     @OnClose
     public void closedConnection(Session session) {
-        /* Remove this connection from the queue */
         queue.remove(session);
         logger.log(Level.INFO, "Connection closed.");
     }
